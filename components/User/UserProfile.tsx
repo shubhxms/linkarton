@@ -1,6 +1,9 @@
-import React from 'react';
-import { createStyles, Avatar, Text, Group } from '@mantine/core';
-import { IconPhoneCall, IconAt } from '@tabler/icons-react';
+import React, { useEffect } from 'react';
+import { signOut } from 'next-auth/react';
+import { createStyles, Avatar, Text, Group, TextInput, ActionIcon, Button } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconCopy, IconAt, IconLogout } from '@tabler/icons-react';
+import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
 
 const useStyles = createStyles((theme) => ({
   icon: {
@@ -15,56 +18,65 @@ const useStyles = createStyles((theme) => ({
 interface UserProfileProps {
   avatar: string;
   name: string;
-  title: string;
-  phone: string;
-  email: string;
 }
 
-const UserProfile = ({ avatar, name, title, phone, email }: UserProfileProps) => {
+interface FormValues {
+  username: string;
+}
+
+function getUsername(): Promise<FormValues> {
+  // TODO: write fn to fetch username from supabase
+  return new Promise((resolve) => {
+    setTimeout(() => resolve({ username: 'shubhxms' }), 2000);
+  });
+}
+
+const UserProfile = ({ avatar, name }: UserProfileProps) => {
   const { classes } = useStyles();
+  const form = useForm<FormValues>({ initialValues: { username: '' } });
+
+  useEffect(() => {
+    getUsername().then((values) => {
+      form.setValues(values);
+      form.resetDirty(values);
+    });
+  }, []);
 
   return (
-    <div>
-      <Group noWrap>
+    <Group noWrap spacing={5} mt="xl">
+      <Group position="center">
+        <Button.Group orientation="vertical">
+          <ColorSchemeToggle />
+          <ActionIcon
+            onClick={() => signOut()}
+            size="xl"
+            mt={5}
+            sx={(theme) => ({
+              backgroundColor:
+                theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+              color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],
+            })}
+          >
+            <IconLogout />
+          </ActionIcon>
+        </Button.Group>
         <Avatar src={avatar} size={94} radius="md" />
         <div>
-          <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
-            {title}
-          </Text>
-
           <Text fz="lg" fw={500} className={classes.name}>
             {name}
           </Text>
 
-          <Group noWrap spacing={10} mt={3}>
+          <Group noWrap spacing={5} mt={3}>
             <IconAt stroke={1.5} size="1rem" className={classes.icon} />
             <Text fz="xs" c="dimmed">
-              {email}
+              <TextInput {...form.getInputProps('username')} />
             </Text>
-          </Group>
-
-          <Group noWrap spacing={10} mt={5}>
-            <IconPhoneCall stroke={1.5} size="1rem" className={classes.icon} />
-            <Text fz="xs" c="dimmed">
-              {phone}
-            </Text>
+            <IconCopy />
           </Group>
         </div>
       </Group>
-    </div>
+    </Group>
   );
 };
 
 export default UserProfile;
-
-{ /* <UserProfile
-{...
-  {
-    avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
-    title: 'Software engineer',
-    name: 'Robert Glassbreaker',
-    email: 'robert@glassbreaker.io',
-    phone: '+11 (876) 890 56 23',
-  }
-}
-/> */ }
