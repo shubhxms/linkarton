@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { signOut } from 'next-auth/react';
-import { createStyles, Avatar, Text, Group, TextInput, ActionIcon, Button } from '@mantine/core';
+import { createStyles, Avatar, Text, Group, TextInput, ActionIcon, Button, Container } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCopy, IconAt, IconLogout } from '@tabler/icons-react';
 import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
@@ -43,39 +43,41 @@ const UserProfile = ({ avatar, name }: UserProfileProps) => {
   }, []);
 
   return (
-    <Group noWrap spacing={5} mt="xl">
-      <Group position="center">
-        <Button.Group orientation="vertical">
-          <ColorSchemeToggle />
-          <ActionIcon
-            onClick={() => signOut()}
-            size="xl"
-            mt={5}
-            sx={(theme) => ({
-              backgroundColor:
-                theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-              color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],
-            })}
-          >
-            <IconLogout />
-          </ActionIcon>
-        </Button.Group>
-        <Avatar src={avatar} size={94} radius="md" />
-        <div>
-          <Text fz="lg" fw={500} className={classes.name}>
-            {name}
-          </Text>
-
-          <Group noWrap spacing={5} mt={3}>
-            <IconAt stroke={1.5} size="1rem" className={classes.icon} />
-            <Text fz="xs" c="dimmed">
-              <TextInput {...form.getInputProps('username')} />
+    <Container mx="auto">
+      <Group noWrap mt="xl" mb="xl">
+        <Group spacing={30} position="center">
+          <Button.Group orientation="vertical">
+            <ColorSchemeToggle />
+            <ActionIcon
+              onClick={() => signOut()}
+              size="xl"
+              mt={5}
+              sx={(theme) => ({
+                backgroundColor:
+                  theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6],
+              })}
+            >
+              <IconLogout />
+            </ActionIcon>
+          </Button.Group>
+          <Avatar src={avatar} size={94} radius="md" />
+          <div>
+            <Text fz="lg" fw={500} className={classes.name}>
+              {name}
             </Text>
-            <IconCopy />
-          </Group>
-        </div>
+
+            <Group noWrap spacing={5} mt={3}>
+              <IconAt stroke={1.5} size="1rem" className={classes.icon} />
+              <Text fz="xs" c="dimmed">
+                <TextInput {...form.getInputProps('username')} size="sm" />
+              </Text>
+              <IconCopy />
+            </Group>
+          </div>
+        </Group>
       </Group>
-    </Group>
+    </Container>
   );
 };
 

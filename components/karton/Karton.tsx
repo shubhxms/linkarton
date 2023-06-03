@@ -1,4 +1,4 @@
-import { Group, TextInput, Box, Text, Code, Button, Center } from '@mantine/core';
+import { Group, TextInput, Box, Text, Code, Button, Center, TextArea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { IconGripVertical } from '@tabler/icons-react';
@@ -7,14 +7,22 @@ export default function Karton() {
   const form = useForm({
     initialValues: {
       employees: [
-        { name: 'John Doe', email: 'john@mantine.dev' },
-        { name: 'Bill Love', email: 'bill@mantine.dev' },
-        { name: 'Nancy Eagle', email: 'nanacy@mantine.dev' },
-        { name: 'Lim Notch', email: 'lim@mantine.dev' },
-        { name: 'Susan Seven', email: 'susan@mantine.dev' },
+        { name: 'John Doe' },
+        { name: 'Bill Love' },
+        { name: 'Nancy Eagle' },
+        { name: 'Lim Notch' },
+        { name: 'Susan Seven' },
       ],
     },
   });
+
+  let employees: [
+    { name: 'John Doe' },
+    { name: 'Bill Love' },
+    { name: 'Nancy Eagle' },
+    { name: 'Lim Notch' },
+    { name: 'Susan Seven' }
+  ];
 
   const fields = form.values.employees.map((_, index) => (
     <Draggable key={index} index={index} draggableId={index.toString()}>
@@ -23,10 +31,11 @@ export default function Karton() {
           <Center {...provided.dragHandleProps}>
             <IconGripVertical size="1.2rem" />
           </Center>
-          <TextInput placeholder="John Doe" {...form.getInputProps(`employees.${index}.name`)} />
+
           <TextInput
-            placeholder="example@mail.com"
-            {...form.getInputProps(`employees.${index}.email`)}
+            placeholder="John Doe"
+            {...form.getInputProps(`employees.${index}.name`)}
+            radius="md"
           />
         </Group>
       )}
@@ -55,11 +64,6 @@ export default function Karton() {
           Add employee
         </Button>
       </Group>
-
-      <Text size="sm" weight={500} mt="md">
-        Form values:
-      </Text>
-      <Code block>{JSON.stringify(form.values, null, 2)}</Code>
     </Box>
   );
 }

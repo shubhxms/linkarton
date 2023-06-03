@@ -48,6 +48,7 @@
     "cookies-next": "^2.1.1",
     "dayjs": "^1.11.6",
     "embla-carousel-react": "^7.0.3",
+    "google-map-react": "^2.2.1",
     "next": "13.2.4",
     "next-auth": "^4.22.1",
     "react": "18.2.0",
